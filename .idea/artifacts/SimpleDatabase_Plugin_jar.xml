@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SimpleDatabase_Plugin:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SimpleDatabase_Plugin_jar</output-path>
+    <root id="archive" name="SimpleDatabase_Plugin.jar">
+      <element id="module-output" name="SimpleDatabase_Plugin" />
+      <element id="extracted-dir" path="E:/Programming/Spigot_Dev/spigot-1.15.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
