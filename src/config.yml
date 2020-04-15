@@ -1,0 +1,9 @@
+# ---- Configuration ---- #
+# ---- Replace comments with database information ---- #
+# ---- Surround each field entry with single quotes EXCEPT for port ---- #
+
+host: # - Database IP - #
+port: # - Database Port - #
+database: # - Name of Database - #
+username: # - Database Credentials - #
+password: # - Database Credentials - #
