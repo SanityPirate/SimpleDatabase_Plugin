@@ -5,18 +5,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * SimpleDatabasePlugin for Minecraft Spigot Server
@@ -49,27 +46,18 @@ public class SimpleDatabasePlugin extends JavaPlugin {
     private boolean isListHomeLoaded = false;
     private boolean isFindHomeLoaded = false;
 
+    // Config File
+    private FileConfiguration config = getConfig();
+
     @Override
     public void onEnable() {
-        // Used for database connection - configure db.properties.
-        try {
-            FileReader reader = new FileReader("db.properties");
+        // Used for database connection - configure config.yml.
+        host = config.getString("host");
+        port = config.getInt("port");
+        database = config.getString("database");
+        username = config.getString("username");
+        password = config.getString("password");
 
-            Properties p = new Properties();
-            try {
-                p.load(reader);
-                host = p.getProperty("host");
-                port = Integer.parseInt(p.getProperty("port"));
-                database = p.getProperty("database");
-                username = p.getProperty("username");
-                password = p.getProperty("password");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            Bukkit.getConsoleSender().sendMessage("[ERROR] db.properties file not found!");
-            e.printStackTrace();
-        }
     }
 
     @Override
