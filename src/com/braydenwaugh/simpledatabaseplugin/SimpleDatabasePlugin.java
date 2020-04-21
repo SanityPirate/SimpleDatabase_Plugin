@@ -14,6 +14,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * SimpleDatabasePlugin for Minecraft Spigot Server
@@ -58,6 +61,22 @@ public class SimpleDatabasePlugin extends JavaPlugin {
         username = config.getString("username");
         password = config.getString("password");
 
+        // keep SQL connection alive
+        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+        ses.scheduleAtFixedRate(new BukkitRunnable() {
+            @Override
+            public void run() {
+                ResultSet valid = null;
+
+                try {
+                    openConnection();
+                    Statement statement = connection.createStatement();
+                    valid = statement.executeQuery("SELECT 1 FROM Dual");
+                } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 0, 3, TimeUnit.HOURS);
     }
 
     @Override
@@ -208,6 +227,7 @@ public class SimpleDatabasePlugin extends JavaPlugin {
         }
         return false;
     }
+
     // Used for DB connection
     public void openConnection() throws SQLException, ClassNotFoundException {
         if (connection != null && !connection.isClosed()) {
@@ -219,7 +239,7 @@ public class SimpleDatabasePlugin extends JavaPlugin {
                 return;
             }
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password + "?autoReconnect=true");
+            connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
         }
     }
 }
